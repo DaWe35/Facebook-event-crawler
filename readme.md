@@ -14,7 +14,7 @@ While facebook removed his events API, retrieving data became difficult. This li
 
 ### Config:
 
-1) Copy CONFIG_DEFAULT.py to CONFIG.py (cp CONFIG_DEFAULT.py CONFIG.py)
+1) Copy CONFIG_DEFAULT.py to CONFIG.py ```cp CONFIG_DEFAULT.py CONFIG.py```
 2) Fill the empty fields below
 3) Run! All records will be inserted to the 'events' table!
 
