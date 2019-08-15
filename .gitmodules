@@ -1,0 +1,3 @@
+[submodule "Geo-cache"]
+	path = Geo-cache
+	url = https://github.com/DaWe35/Geo-cache.git
