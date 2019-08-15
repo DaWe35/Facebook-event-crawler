@@ -31,3 +31,8 @@ git submodule update --init --recursive
 2) Edit Facebook-event-crawler/CONFIG.py
 
 Enjoy!
+
+### Development
+
+Want to contribute? Great!
+Please test a lot, before sending your pull request :)
