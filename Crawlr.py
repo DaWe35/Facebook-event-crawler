@@ -11,6 +11,7 @@ import json
 import requests
 from requests.auth import HTTPBasicAuth
 import logging
+import os.path
 import CONFIG
 
 """ headers = {'user-agent': 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.36'}
@@ -282,18 +283,18 @@ def getpage(page):
         eventurl = "https://mobile.facebook.com/"+page+"?v=events"
         browser.open(eventurl)
         tree = html.fromstring(browser.parsed.encode())
-        strings = tree.xpath('//div[@id="root"]/div/div/div[2]/div/table/tbody/tr/td/div/div/span[3]/div/a[2]/@href')
+        strings = tree.xpath('//div[@id="root"]/div/div/div[2]/div/table/tbody/tr/td/div/div/span[3]/div/a[1]/@href')
         eventids = []
         for string in strings:
-            eventids.append(parse.parse_qs(parse.urlparse(string).query)['event_id'][0])
+            eventids.append(os.path.split(string)[1].split('?')[0])
         istheremore = tree.xpath('//div[@id="m_more_friends_who_like_this"]/a/span/text()')
         while istheremore:
             nexturl = tree.xpath('//div[@id="m_more_friends_who_like_this"]/a/@href')[0]
             browser.open('https://mobile.facebook.com'+nexturl)
             tree = html.fromstring(browser.parsed.encode())
-            strings = tree.xpath('//div[@id="root"]/div/div/div[2]/div/table/tbody/tr/td/div/div/span[3]/div/a[2]/@href')
+            strings = tree.xpath('//div[@id="root"]/div/div/div[2]/div/table/tbody/tr/td/div/div/span[3]/div/a[1]/@href')
             for string in strings:
-                eventids.append(parse.parse_qs(parse.urlparse(string).query)['event_id'][0])
+                eventids.append(os.path.split(string)[1].split('?')[0])
             istheremore = tree.xpath('//div[@id="m_more_friends_who_like_this"]/a/span/text()')
         try:
             now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
