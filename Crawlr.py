@@ -149,31 +149,34 @@ def getevent(eventid):
         event_place = event_date_place[1]
         event_going = event_going_number[0]
         event_interested = event_going_number[1]
+        lat = '0' # initialize variables
+        lon = '0'
 
-        if event_location != None:
-            print('\n' + CONFIG.GEOCACHE_HOST + '?address='+event_location + '\n')
-            response = requests.get(CONFIG.GEOCACHE_HOST + '?address='+event_location, auth=HTTPBasicAuth(CONFIG.GEO_USER, CONFIG.GEO_PASS))
-            if response.status_code == 200:
-                jsondata = json.loads(response.content.decode('utf-8'))
-                lon = jsondata['lon']
-                lat = jsondata['lat']
-            else:
-                lat = '0'
-                lon = '0'
-                print(' - gps coord response #1 status == ' + str(response.status_code) + ' - ', end='')
-        if event_location == None or lat == '0.000000' or lat == 'null':
-            event_ago = event_location
-            event_location = None
-            response = requests.get(CONFIG.GEOCACHE_HOST + '?address='+event_place+', Magyarország', auth=HTTPBasicAuth(CONFIG.GEO_USER, CONFIG.GEO_PASS))
-            if response.status_code == 200:
-                jsondata = json.loads(response.content.decode('utf-8'))
-                lon = jsondata['lon']
-                lat = jsondata['lat']
-            else:
-                lat = '0'
-                lon = '0'
-                print(' - gps coord is 0: '+event_place)
-                print(' - gps coord response #2 status == '+ str(response.status_code) + ' - ', end='')
+        if CONFIG.GEOCACHE_HOST != '':
+            if event_location != None:  # Get event location geocode
+                logging.info('\n' + CONFIG.GEOCACHE_HOST + '?address='+event_location + '\n')
+                response = requests.get(CONFIG.GEOCACHE_HOST + '?address='+event_location, auth=HTTPBasicAuth(CONFIG.GEO_USER, CONFIG.GEO_PASS))
+                if response.status_code == 200:
+                    jsondata = json.loads(response.content.decode('utf-8'))
+                    lon = jsondata['lon']
+                    lat = jsondata['lat']
+                else:
+                    logging.warning(' - gps coord response #1 status == ' + str(response.status_code) + ' - ', end='')
+            if event_location == None or lat == '0.000000' or lat == 'null':    # Geocode failed with event_location, try event_place
+                event_ago = event_location
+                event_location = None
+                response = requests.get(CONFIG.GEOCACHE_HOST + '?address='+event_place+', Magyarország', auth=HTTPBasicAuth(CONFIG.GEO_USER, CONFIG.GEO_PASS))
+                if response.status_code == 200:
+                    jsondata = json.loads(response.content.decode('utf-8'))
+                    lon = jsondata['lon']
+                    lat = jsondata['lat']
+                else:
+                    logging.warning(' - gps coord is 0: '+event_place)
+                    logging.warning(' - gps coord response #2 status == '+ str(response.status_code) + ' - ', end='')
+        else:
+            logging.info('GEOCACHE_HOST is not defined in CONFIG.py, skipping geocoding')
+
+
         with connection.cursor() as cursor:
             # print(eventid, lines, event_date[0], datefrom, dateto, event_place[0], event_ago, event_location, event_going_number[0], event_going_number[1], '0', '34.123', now)
             sql = "INSERT INTO events (`id`, `page`, `title`, `description`, `date`, `datefrom`, `dateto`, `place`, `ago`, `location`, `going`, `intrested`, `photo`, `lat`, `lon`, `lastupdate`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON DUPLICATE KEY UPDATE `title`=%s,`page`=%s,`description`=%s,`date`=%s,`datefrom`=%s,`dateto`=%s,`place`=%s,`ago`=%s,`location`=%s,`going`=%s,`intrested`=%s,`photo`=%s,`lat`=%s,`lon`=%s,`lastupdate`=%s;"
