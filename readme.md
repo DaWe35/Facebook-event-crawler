@@ -36,3 +36,13 @@ Enjoy!
 
 Want to contribute? Great!
 Please test a lot, before sending your pull request :)
+
+### Alternatives
+
+This crawler is not too universal, so if you need to crawl anything else, I would recommend these:
+
+| Crawler                                        | No coding required | Login feature | Open source & self hosted |
+|------------------------------------------------|--------------------|---------------|---------------------------|
+| [Scrapy](https://scrapy\.org)                  |                    | ✓             | ✓                         |
+| [ParseHub](https://www\.parsehub\.com)         | ✓                  | ✓             |                           |
+| [Simple Scaper](https://simplescraper\.io)     | ✓                  | ?             |                           |
