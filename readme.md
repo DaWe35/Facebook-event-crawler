@@ -8,7 +8,7 @@ While facebook removed his events API, retrieving data became difficult. This li
 
 1) Create a new non-used facebook account
 2) Change the language to English/US! (That's important!) (https://www.facebook.com/settings?tab=language)
-3) Create a new mysql table callled 'event_crawler'
+3) Create a new mysql database
 4) Import the database.sql file
 5) Add some page ids to the pages database table (the page id is on the link, for example facebook.com/PageId)
 
