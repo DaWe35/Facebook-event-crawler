@@ -1,5 +1,5 @@
 git+git://github.com/HACKER-3000/robobrowser@patch-1#egg=robobrowser
 PyMySQL==0.9.2
 timestring==1.6.2
-lxml==4.6.3
+lxml==4.6.5
 requests==2.20.1
